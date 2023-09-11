@@ -1,4 +1,4 @@
-package org.cclemongen.cclemongen;
+package org.cclemongen;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +8,16 @@ public class CclemongenApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CclemongenApplication.class, args);
+
+
+		
+		
+
+
+
+
+
+
 	}
 
 }
