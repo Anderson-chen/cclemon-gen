@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-CclemongenApplication<cclemongen>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.cclemongen.CclemongenApplication",
+            "projectName": "cclemongen",
+            "args": "--spring.output.ansi.enabled=ALWAYS",
+            "envFile": "${workspaceFolder}/.env",
+            "console": "internalConsole"
+        }
+    ]
+}

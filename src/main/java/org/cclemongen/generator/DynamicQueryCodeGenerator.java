@@ -12,18 +12,10 @@ import freemarker.template.TemplateException;
 
 public class DynamicQueryCodeGenerator {
 
-    public static void main(String[] args) throws IOException, TemplateException {
-        // 获取实体类的 Class 对象（假设你的实体类是 User）
-        // Class<?> entityClass = User.class;
-
-        // 使用 FreeMarker 生成查询代码
-        generateQueryCode();
-    }
-
-    private static void generateQueryCode() throws IOException, TemplateException {
+    public static void generateQueryCode() throws IOException, TemplateException {
         // 配置 FreeMarker
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setClassForTemplateLoading(DynamicQueryCodeGenerator.class, "/ftl");
+        configuration.setClassForTemplateLoading(DynamicQueryCodeGenerator.class, "/templates");
 
         // 创建 FreeMarker 模板
         Template template = configuration.getTemplate("queryMethod.ftl");
@@ -42,7 +34,7 @@ public class DynamicQueryCodeGenerator {
         dataModel.put("fieldNames", "GENDER");
 
         // 创建输出目录
-        File outputDirectory = new File("src/main/java/org/cclemongen/generator/output");
+        File outputDirectory = new File("src/main/resources/output");
         outputDirectory.mkdirs();
 
         // 生成查询方法代码文件
