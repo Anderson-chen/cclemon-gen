@@ -37,7 +37,6 @@ public class MetaDataService {
             metaDataDTO.setColumnType(columns.getString("TYPE_NAME"));// 欄位類型
             metaDataDTO.setColumnSize(columns.getInt("COLUMN_SIZE"));// 欄位大小
             metaDataDTO.setRemark(columns.getString("REMARKS"));// 欄位說明
-            metaDataDTO.setRemark(columns.getString("REMARKS"));// 欄位說明
             metaDataDTO.setIsNullable(columns.getString("IS_NULLABLE"));// nullable
 
             metaDataDTOList.add(metaDataDTO);
