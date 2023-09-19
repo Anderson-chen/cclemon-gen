@@ -32,19 +32,15 @@ public class CodeGenerator {
 
         Template template = getTemplate("entityCode.ftl");
 
-        String entityClassName = StringUtils.capitalize(tableName);
+        String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
 
         Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("entityClassName", entityClassName);
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
-        File outputDirectory = new File(destination + "/" + tableName + "/entity");
+        File outputDirectory = new File(destination + "/" + entityClassName + "/entity");
 
-        boolean isCreated = outputDirectory.mkdirs();
-
-        if (!isCreated) {
-            throw new Exception("找不到指定目錄");
-        }
+        outputDirectory.mkdirs();
 
         System.out.println("ENTITY CODE START CREATE...");
 
@@ -54,7 +50,7 @@ public class CodeGenerator {
 
         }
 
-        System.out.println(outputDirectory + entityClassName + ".java" + "CREATE DONE");
+        System.out.println(outputDirectory + entityClassName + ".java" + "\tCREATE DONE");
 
     }
 
@@ -72,19 +68,15 @@ public class CodeGenerator {
 
         Template template = getTemplate("repositoryCode.ftl");
 
-        String entityClassName = StringUtils.capitalize(tableName);
+        String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
 
         Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("entityClassName", entityClassName);
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
-        File outputDirectory = new File(destination + "/" + tableName + "/repository");
+        File outputDirectory = new File(destination + "/" + entityClassName + "/repository");
 
-        boolean isCreated = outputDirectory.mkdirs();
-
-        if (!isCreated) {
-            throw new Exception("找不到指定目錄");
-        }
+        outputDirectory.mkdirs();
 
         System.out.println("REPOSITORY CODE START CREATE...");
 
@@ -93,7 +85,7 @@ public class CodeGenerator {
             template.process(dataModel, fileWriter);
         }
 
-        System.out.println(outputDirectory + entityClassName + "Repository.java" + "CREATE DONE");
+        System.out.println(outputDirectory + entityClassName + "Repository.java" + "\tCREATE DONE");
     }
 
     /**
@@ -111,19 +103,15 @@ public class CodeGenerator {
 
         Template template = getTemplate("specificationCode.ftl");
 
-        String entityClassName = StringUtils.capitalize(tableName);
+        String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
 
         Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("entityClassName", entityClassName);
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
-        File outputDirectory = new File(destination + "/" + tableName + "/specification");
+        File outputDirectory = new File(destination + "/" + entityClassName + "/specification");
 
-        boolean isCreated = outputDirectory.mkdirs();
-
-        if (!isCreated) {
-            throw new Exception("找不到指定目錄");
-        }
+        outputDirectory.mkdirs();
 
         System.out.println("SPECIFICATION CODE START CREATE...");
 
@@ -132,7 +120,7 @@ public class CodeGenerator {
             template.process(dataModel, fileWriter);
         }
 
-       System.out.println(outputDirectory + entityClassName + "Specification.java" + "CREATE DONE");
+        System.out.println(outputDirectory + entityClassName + "Specification.java" + "\tCREATE DONE");
     }
 
     private static Template getTemplate(String templateName)
