@@ -1,5 +1,6 @@
 package org.cclemongen.service;
 
+import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,9 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cclemongen.dto.MetaDataDTO;
+import org.cclemongen.generator.CodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import freemarker.template.TemplateException;
 
 @Service
 public class MetaDataService {
@@ -17,7 +21,35 @@ public class MetaDataService {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<MetaDataDTO> getMetadata(String schemaPattern, String tableNamePattern) throws SQLException {
+    /**
+     * codeGen主流程
+     * 
+     * 
+     * @param schema
+     * @param tableName
+     * @param destination
+     * @throws SQLException
+     * @throws IOException
+     * @throws TemplateException
+     */
+    public void codeGen(String schema, String tableName, String destination)
+            throws SQLException, IOException, TemplateException {
+
+        // 取得metaData資訊
+        List<MetaDataDTO> metaDataDTOList = getMetadata(schema, tableName);
+
+        // 產生Entity
+        CodeGenerator.generateEntityCode(tableName, metaDataDTOList, destination);
+
+        // 產生Repository
+        CodeGenerator.generateRepositoryCode(tableName, metaDataDTOList, destination);
+
+        // 產生動態查詢
+        CodeGenerator.generateDynamicQueryCode(tableName, metaDataDTOList, destination);
+
+    }
+
+    private List<MetaDataDTO> getMetadata(String schemaPattern, String tableNamePattern) throws SQLException {
 
         // 透過jdbcTemplate取得metaData
         DatabaseMetaData metaData = jdbcTemplate.getDataSource().getConnection().getMetaData();

@@ -10,6 +10,7 @@ import org.cclemongen.dto.MetaDataDTO;
 import org.cclemongen.generator.CodeGenerator;
 import org.cclemongen.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -20,6 +21,15 @@ public class CclemongenApplication {
 
 	@Autowired
 	MetaDataService metaDataService;
+
+	@Value("${classpath:resources/output/entity}")
+	String entityPath;
+
+	@Value("${classpath:resources/output/repository}")
+	String repositoryPath;
+
+	@Value("${classpath:resources/output/dynamicQuery}")
+	String dymamicQueryPath;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CclemongenApplication.class, args);
@@ -32,11 +42,9 @@ public class CclemongenApplication {
 
 		String tableName = "body";
 
-		// 取得metaData資訊
-		List<MetaDataDTO> metaDataDTOList = metaDataService.getMetadata(schema, tableName);
+		String destination = "C:\\git";
 
-		// 依據產生檔案
-		CodeGenerator.generateEntityCode(tableName, metaDataDTOList);
+		metaDataService.codeGen(schema, tableName, destination);
 	}
 
 }

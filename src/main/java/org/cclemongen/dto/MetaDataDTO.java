@@ -1,8 +1,5 @@
 package org.cclemongen.dto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.util.StringUtils;
 
 import lombok.Getter;
