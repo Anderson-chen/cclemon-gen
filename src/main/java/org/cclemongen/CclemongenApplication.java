@@ -2,12 +2,9 @@ package org.cclemongen;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.cclemongen.dto.MetaDataDTO;
-import org.cclemongen.generator.CodeGenerator;
 import org.cclemongen.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
