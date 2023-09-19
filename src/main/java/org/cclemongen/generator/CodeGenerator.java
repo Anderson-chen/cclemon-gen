@@ -46,12 +46,16 @@ public class CodeGenerator {
             throw new Exception("找不到指定目錄");
         }
 
+        System.out.println("ENTITY CODE START CREATE...");
+
         try (FileWriter fileWriter = new FileWriter(
                 new File(outputDirectory, entityClassName + ".java"))) {
             template.process(dataModel, fileWriter);
+
         }
 
-        System.out.println("ENTITY CODE GEN DONE");
+        System.out.println(outputDirectory + entityClassName + ".java" + "CREATE DONE");
+
     }
 
     /**
@@ -82,12 +86,14 @@ public class CodeGenerator {
             throw new Exception("找不到指定目錄");
         }
 
+        System.out.println("REPOSITORY CODE START CREATE...");
+
         try (FileWriter fileWriter = new FileWriter(
-                new File(outputDirectory, entityClassName + "repository.java"))) {
+                new File(outputDirectory, entityClassName + "Repository.java"))) {
             template.process(dataModel, fileWriter);
         }
 
-        System.out.println("DYNAMIC QUERY CODE GEN DONE");
+        System.out.println(outputDirectory + entityClassName + "Repository.java" + "CREATE DONE");
     }
 
     /**
@@ -119,12 +125,14 @@ public class CodeGenerator {
             throw new Exception("找不到指定目錄");
         }
 
+        System.out.println("SPECIFICATION CODE START CREATE...");
+
         try (FileWriter fileWriter = new FileWriter(
                 new File(outputDirectory, entityClassName + "Specification.java"))) {
             template.process(dataModel, fileWriter);
         }
 
-        System.out.println("DYNAMIC QUERY CODE GEN DONE");
+       System.out.println(outputDirectory + entityClassName + "Specification.java" + "CREATE DONE");
     }
 
     private static Template getTemplate(String templateName)
