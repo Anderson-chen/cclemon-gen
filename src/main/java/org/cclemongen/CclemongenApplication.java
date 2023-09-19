@@ -1,17 +1,10 @@
 package org.cclemongen;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.annotation.PostConstruct;
-
 import org.cclemongen.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import freemarker.template.TemplateException;
 
 @SpringBootApplication
 public class CclemongenApplication {
