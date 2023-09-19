@@ -15,6 +15,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class MetaDataService {
 
+    private static final List<String> excludeScema = new ArrayList<>();
+
+    static {
+        excludeScema.add("information_schema");
+        excludeScema.add("mysql");
+        excludeScema.add("performance_schema");
+        excludeScema.add("sys");
+    }
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -46,6 +55,14 @@ public class MetaDataService {
 
     }
 
+    /**
+     * 指定schema 和 table 取得欄位資訊
+     * 
+     * @param schemaPattern
+     * @param tableNamePattern
+     * @return
+     * @throws SQLException
+     */
     private List<MetaDataDTO> getMetadata(String schemaPattern, String tableNamePattern) throws SQLException {
 
         // 透過jdbcTemplate取得metaData
@@ -73,6 +90,53 @@ public class MetaDataService {
 
         return metaDataDTOList;
 
+    }
+
+    /**
+     * 指定schema 取得所有table名稱
+     * 
+     * @param schemaPattern
+     * @return
+     * @throws SQLException
+     */
+    public List<String> getTableNames(String pattern) throws SQLException {
+
+        List<String> tableNames = new ArrayList<>();
+
+        // 透過jdbcTemplate取得metaData
+        DatabaseMetaData metaData = jdbcTemplate.getDataSource().getConnection().getMetaData();
+
+        // 指定table的欄位資訊
+        ResultSet tablesResultSet = metaData.getTables(pattern, pattern, null, new String[] { "TABLE" });
+
+        while (tablesResultSet.next()) {
+            String tableName = tablesResultSet.getString("TABLE_NAME");
+            tableNames.add(tableName);
+        }
+
+        return tableNames;
+    }
+
+    public List<String> getAllSchema() throws SQLException {
+        List<String> schemas = new ArrayList<>();
+
+        // 透過jdbcTemplate取得metaData
+        DatabaseMetaData metaData = jdbcTemplate.getDataSource().getConnection().getMetaData();
+
+        // 指定table的欄位資訊
+        ResultSet schemaResultSet = metaData.getCatalogs();
+
+        while (schemaResultSet.next()) {
+            String schema = schemaResultSet.getString("TABLE_CAT");
+
+            System.out.println("schema:" + schema);
+
+            if (!excludeScema.contains(schema)) {
+                schemas.add(schema);
+            }
+        }
+
+        return schemas;
     }
 
 }

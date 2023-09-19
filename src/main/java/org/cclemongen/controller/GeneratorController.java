@@ -1,5 +1,9 @@
 package org.cclemongen.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.cclemongen.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.Builder;
@@ -22,9 +27,8 @@ public class GeneratorController {
    @Autowired
    MetaDataService metaDataService;
 
-   @GetMapping("/home")
-   public String home() {
-
+   @GetMapping(value = "/home")
+   public String home(HttpServletResponse res) {
       return "generator.html";
    }
 
@@ -36,7 +40,29 @@ public class GeneratorController {
 
       metaDataService.codeGen(req.getSchema(), req.getTableName(), req.getDestination());
 
-      return Response.builder().code(200).msg("產檔成功!").build();
+      return Response.builder().result(req).code(200).msg("產檔成功!").build();
+
+   }
+
+   @GetMapping("/getAllSchema")
+   @ResponseBody
+   public Response getAllSchema() throws Exception {
+
+      List<String> schemas = metaDataService.getAllSchema();
+
+      return Response.builder().result(schemas).code(200).msg("查詢成功").build();
+
+   }
+
+   @GetMapping("/getTableNames")
+   @ResponseBody
+   public Response getTableNames(@RequestParam("schema") String schema) throws Exception {
+
+      log.info("schema : {} ", schema);
+
+      List<String> tableNames = metaDataService.getTableNames(schema);
+
+      return Response.builder().result(tableNames).code(200).msg("查詢成功").build();
 
    }
 
@@ -45,7 +71,7 @@ public class GeneratorController {
 
       log.error("{}", e.getMessage());
 
-      return new ResponseEntity<Response>(Response.builder().code(200).msg("產檔案失敗!").build(), null, HttpStatus.OK);
+      return new ResponseEntity<Response>(Response.builder().code(200).msg("執行失敗!").build(), null, HttpStatus.OK);
    }
 
 }
@@ -62,4 +88,5 @@ class Request {
 class Response {
    private int code;
    private String msg;
+   private Object result;
 }

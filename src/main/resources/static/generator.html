@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta charset="utf-8" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,25 +16,28 @@
   <body>
     <div class="m-3 col-5">
       <label for="dbSchema" class="form-label">DB SCHEMA</label>
-      <input
+      <select
+        onchange="quertTableName()"
         type="dbSchema"
-        class="form-control"
+        class="form-select"
         id="dbSchema"
-        aria-describedby="emailHelp"
-      />
+      >
+        <option selected>請選擇SCHEMA</option>
+      </select>
     </div>
     <div class="m-3 col-5">
       <label for="tableName" class="form-label">TABLE NAME</label>
-      <input type="tableName" class="form-control" id="tableName" />
+      <select  type="tableName" class="form-select" id="tableName"></select>
     </div>
     <div class="m-3 col-5">
       <label for="destination" class="form-label">DESTINATION</label>
       <input type="destination" class="form-control" id="destination" />
     </div>
-    <button onclick="codeGen()" class="m-3 btn btn-primary">Submit</button>
+    <button onclick="codeGen()" class="m-3 btn btn-primary">產生程式碼</button>
   </body>
 
   <script>
+    //執行codegen流程
     const codeGen = async () => {
       let body = {
         schema: document.getElementById("dbSchema").value,
@@ -53,6 +57,47 @@
 
       alert(msg);
     };
+
+    //根據指定schema去查詢tableNames
+    const quertTableName = async () => {
+      const response = await fetch(
+        "http://localhost:8080/getTableNames?" +
+          new URLSearchParams({
+            schema: document.getElementById("dbSchema").value,
+          })
+      );
+
+      let { result } = await response.json();
+
+      var selectElement = document.getElementById("tableName");
+
+      selectElement.innerHTML = "";
+
+      for (var i = 0; i < result.length; i++) {
+        var option = document.createElement("option");
+        option.value = result[i];
+        option.text = result[i];
+        selectElement.appendChild(option);
+      }
+    };
+
+    //初始化schema下拉式選單
+    const create = async () => {
+      const response = await fetch("http://localhost:8080/getAllSchema");
+
+      let { result } = await response.json();
+
+      var selectElement = document.getElementById("dbSchema");
+
+      for (var i = 0; i < result.length; i++) {
+        var option = document.createElement("option");
+        option.value = result[i];
+        option.text = result[i];
+        selectElement.appendChild(option);
+      }
+    };
+
+    create();
   </script>
   <style></style>
 </html>
