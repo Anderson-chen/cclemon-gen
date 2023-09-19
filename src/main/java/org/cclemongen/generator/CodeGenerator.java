@@ -14,7 +14,6 @@ import freemarker.core.ParseException;
 import freemarker.template.Configuration;
 import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
 
 public class CodeGenerator {
@@ -26,11 +25,10 @@ public class CodeGenerator {
      * @param tableName
      * @param metaDataDTOList
      * @param destination
-     * @throws IOException
-     * @throws TemplateException
+     * @throws Exception
      */
     public static void generateEntityCode(String tableName, List<MetaDataDTO> metaDataDTOList, String destination)
-            throws IOException, TemplateException {
+            throws Exception {
 
         Template template = getTemplate("entityCode.ftl");
 
@@ -41,7 +39,12 @@ public class CodeGenerator {
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
         File outputDirectory = new File(destination + "/" + tableName + "/entity");
-        outputDirectory.mkdirs();
+
+        boolean isCreated = outputDirectory.mkdirs();
+
+        if (!isCreated) {
+            throw new Exception("找不到指定目錄");
+        }
 
         try (FileWriter fileWriter = new FileWriter(
                 new File(outputDirectory, entityClassName + ".java"))) {
@@ -58,15 +61,10 @@ public class CodeGenerator {
      * @param tableName
      * @param metaDataDTOList
      * @param dymamicQueryPath
-     * @throws IOException
-     * @throws ParseException
-     * @throws MalformedTemplateNameException
-     * @throws TemplateNotFoundException
-     * @throws TemplateException
+     * @throws Exception
      */
     public static void generateRepositoryCode(String tableName, List<MetaDataDTO> metaDataDTOList,
-            String destination) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException,
-            IOException, TemplateException {
+            String destination) throws Exception {
 
         Template template = getTemplate("repositoryCode.ftl");
 
@@ -77,7 +75,12 @@ public class CodeGenerator {
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
         File outputDirectory = new File(destination + "/" + tableName + "/repository");
-        outputDirectory.mkdirs();
+
+        boolean isCreated = outputDirectory.mkdirs();
+
+        if (!isCreated) {
+            throw new Exception("找不到指定目錄");
+        }
 
         try (FileWriter fileWriter = new FileWriter(
                 new File(outputDirectory, entityClassName + "repository.java"))) {
@@ -94,16 +97,11 @@ public class CodeGenerator {
      * @param tableName
      * @param metaDataDTOList
      * @param destination
-     * @throws TemplateNotFoundException
-     * @throws MalformedTemplateNameException
-     * @throws ParseException
-     * @throws IOException
-     * @throws TemplateException
+     * @throws Exception
      */
     public static void generateDynamicQueryCode(String tableName, List<MetaDataDTO> metaDataDTOList,
             String destination)
-            throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
-            TemplateException {
+            throws Exception {
 
         Template template = getTemplate("specificationCode.ftl");
 
@@ -114,7 +112,12 @@ public class CodeGenerator {
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
         File outputDirectory = new File(destination + "/" + tableName + "/specification");
-        outputDirectory.mkdirs();
+
+        boolean isCreated = outputDirectory.mkdirs();
+
+        if (!isCreated) {
+            throw new Exception("找不到指定目錄");
+        }
 
         try (FileWriter fileWriter = new FileWriter(
                 new File(outputDirectory, entityClassName + "Specification.java"))) {

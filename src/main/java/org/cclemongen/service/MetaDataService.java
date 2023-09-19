@@ -1,6 +1,5 @@
 package org.cclemongen.service;
 
-import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +11,6 @@ import org.cclemongen.generator.CodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-import freemarker.template.TemplateException;
 
 @Service
 public class MetaDataService {
@@ -28,15 +25,17 @@ public class MetaDataService {
      * @param schema
      * @param tableName
      * @param destination
-     * @throws SQLException
-     * @throws IOException
-     * @throws TemplateException
+     * @throws Exception
      */
     public void codeGen(String schema, String tableName, String destination)
-            throws SQLException, IOException, TemplateException {
+            throws Exception {
 
         // 取得metaData資訊
         List<MetaDataDTO> metaDataDTOList = getMetadata(schema, tableName);
+
+        if (metaDataDTOList.size() == 0) {
+            throw new Exception("DB資訊錯誤");
+        }
 
         // 產生Entity
         CodeGenerator.generateEntityCode(tableName, metaDataDTOList, destination);

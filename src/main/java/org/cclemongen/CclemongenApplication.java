@@ -32,16 +32,4 @@ public class CclemongenApplication {
 		SpringApplication.run(CclemongenApplication.class, args);
 	}
 
-	@PostConstruct
-	private void init() throws SQLException, IOException, TemplateException {
-
-		String schema = "cclemon";
-
-		String tableName = "body";
-
-		String destination = "C:\\git";
-
-		metaDataService.codeGen(schema, tableName, destination);
-	}
-
 }
