@@ -37,14 +37,12 @@ public class MetaDataService {
             throw new Exception("DB資訊錯誤");
         }
 
-        // 產生Entity
-        CodeGenerator.generateEntityCode(tableName, metaDataDTOList, destination);
+        String[] types = { "entity", "repository", "specification" };
 
-        // 產生Repository
-        CodeGenerator.generateRepositoryCode(tableName, metaDataDTOList, destination);
-
-        // 產生動態查詢
-        CodeGenerator.generateDynamicQueryCode(tableName, metaDataDTOList, destination);
+        // 根據types去產生所需程式碼
+        for (String type : types) {
+            CodeGenerator.generateCode(tableName, metaDataDTOList, destination, type);
+        }
 
     }
 

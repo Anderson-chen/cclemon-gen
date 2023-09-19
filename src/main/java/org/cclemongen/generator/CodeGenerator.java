@@ -20,17 +20,18 @@ public class CodeGenerator {
 
     /**
      * 
-     * 產生entity的程式碼
+     * 產生程式碼主流程
      * 
      * @param tableName
      * @param metaDataDTOList
      * @param destination
      * @throws Exception
      */
-    public static void generateEntityCode(String tableName, List<MetaDataDTO> metaDataDTOList, String destination)
+    public static void generateCode(String tableName, List<MetaDataDTO> metaDataDTOList, String destination,
+            String type)
             throws Exception {
 
-        Template template = getTemplate("entityCode.ftl");
+        Template template = getTemplate(type + "Code.ftl");
 
         String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
 
@@ -38,89 +39,21 @@ public class CodeGenerator {
         dataModel.put("entityClassName", entityClassName);
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
-        File outputDirectory = new File(destination + "/" + entityClassName + "/entity");
+        File outputDirectory = new File(destination + "/" + entityClassName + "/" + type);
 
         outputDirectory.mkdirs();
 
-        System.out.println("ENTITY CODE START CREATE...");
+        System.out.println(type.toUpperCase() + " CODE START CREATE...");
 
         try (FileWriter fileWriter = new FileWriter(
-                new File(outputDirectory, entityClassName + ".java"))) {
+                new File(outputDirectory, entityClassName + StringUtils.capitalize(type) + ".java"))) {
             template.process(dataModel, fileWriter);
 
         }
 
-        System.out.println(outputDirectory + entityClassName + ".java" + "\tCREATE DONE");
+        System.out.println(
+                outputDirectory + "\\" + entityClassName + StringUtils.capitalize(type) + ".java" + " CREATE DONE");
 
-    }
-
-    /**
-     * 
-     * 產生Repository的程式碼
-     * 
-     * @param tableName
-     * @param metaDataDTOList
-     * @param dymamicQueryPath
-     * @throws Exception
-     */
-    public static void generateRepositoryCode(String tableName, List<MetaDataDTO> metaDataDTOList,
-            String destination) throws Exception {
-
-        Template template = getTemplate("repositoryCode.ftl");
-
-        String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
-
-        Map<String, Object> dataModel = new HashMap<>();
-        dataModel.put("entityClassName", entityClassName);
-        dataModel.put("metaDataDTOList", metaDataDTOList);
-
-        File outputDirectory = new File(destination + "/" + entityClassName + "/repository");
-
-        outputDirectory.mkdirs();
-
-        System.out.println("REPOSITORY CODE START CREATE...");
-
-        try (FileWriter fileWriter = new FileWriter(
-                new File(outputDirectory, entityClassName + "Repository.java"))) {
-            template.process(dataModel, fileWriter);
-        }
-
-        System.out.println(outputDirectory + entityClassName + "Repository.java" + "\tCREATE DONE");
-    }
-
-    /**
-     * 
-     * 產生動態查詢的程式碼
-     * 
-     * @param tableName
-     * @param metaDataDTOList
-     * @param destination
-     * @throws Exception
-     */
-    public static void generateDynamicQueryCode(String tableName, List<MetaDataDTO> metaDataDTOList,
-            String destination)
-            throws Exception {
-
-        Template template = getTemplate("specificationCode.ftl");
-
-        String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
-
-        Map<String, Object> dataModel = new HashMap<>();
-        dataModel.put("entityClassName", entityClassName);
-        dataModel.put("metaDataDTOList", metaDataDTOList);
-
-        File outputDirectory = new File(destination + "/" + entityClassName + "/specification");
-
-        outputDirectory.mkdirs();
-
-        System.out.println("SPECIFICATION CODE START CREATE...");
-
-        try (FileWriter fileWriter = new FileWriter(
-                new File(outputDirectory, entityClassName + "Specification.java"))) {
-            template.process(dataModel, fileWriter);
-        }
-
-        System.out.println(outputDirectory + entityClassName + "Specification.java" + "\tCREATE DONE");
     }
 
     private static Template getTemplate(String templateName)
