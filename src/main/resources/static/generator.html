@@ -56,7 +56,7 @@
         headers: { "Content-Type": "application/json" },
       };
 
-      const response = await fetch("http://localhost:8080/codeGen", init);
+      const response = await fetch("http://localhost:8081/codeGen", init);
 
       let { msg } = await response.json();
 
@@ -66,7 +66,7 @@
     //根據指定schema去查詢tableNames
     const quertTableName = async () => {
       const response = await fetch(
-        "http://localhost:8080/getTableNames?" +
+        "http://localhost:8081/getTableNames?" +
           new URLSearchParams({
             schema: document.getElementById("dbSchema").value,
           })
@@ -88,7 +88,7 @@
 
     //初始化schema下拉式選單
     const create = async () => {
-      const response = await fetch("http://localhost:8080/getAllSchema");
+      const response = await fetch("http://localhost:8081/getAllSchema");
 
       let { result } = await response.json();
 

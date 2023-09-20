@@ -39,6 +39,7 @@ public class CodeGenerator {
         String entityClassName = StringUtils.capitalize(lowerCaseTableName);// 大駝峰
 
         Map<String, Object> dataModel = new HashMap<>();
+        dataModel.put("tableName", freeMakerGenDTO.getTableName());
         dataModel.put("lowerCaseTableName", lowerCaseTableName);
         dataModel.put("entityClassName", entityClassName);
         dataModel.put("groupId", freeMakerGenDTO.getGroupId());
