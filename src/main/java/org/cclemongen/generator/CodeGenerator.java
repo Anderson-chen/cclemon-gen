@@ -25,10 +25,11 @@ public class CodeGenerator {
      * @param tableName
      * @param metaDataDTOList
      * @param destination
+     * @param groupId
      * @throws Exception
      */
     public static void generateCode(String tableName, List<MetaDataDTO> metaDataDTOList, String destination,
-            String type)
+            String type, String groupId)
             throws Exception {
 
         Template template = getTemplate(type + "Code.ftl");
@@ -37,6 +38,7 @@ public class CodeGenerator {
 
         Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("entityClassName", entityClassName);
+        dataModel.put("groupId", groupId);
         dataModel.put("metaDataDTOList", metaDataDTOList);
 
         File outputDirectory = new File(destination + "/" + entityClassName + "/" + type);

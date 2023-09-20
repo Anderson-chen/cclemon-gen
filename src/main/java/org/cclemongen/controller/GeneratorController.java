@@ -38,7 +38,7 @@ public class GeneratorController {
 
       log.info("req : {} ", req);
 
-      metaDataService.codeGen(req.getSchema(), req.getTableName(), req.getDestination());
+      metaDataService.codeGen(req.getSchema(), req.getTableName(), req.getDestination(), req.getGroupId());
 
       return Response.builder().result(req).code(200).msg("產檔成功!").build();
 
@@ -81,6 +81,7 @@ class Request {
    String schema;
    String tableName;
    String destination;
+   String groupId;
 }
 
 @Data

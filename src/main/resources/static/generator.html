@@ -27,7 +27,11 @@
     </div>
     <div class="m-3 col-5">
       <label for="tableName" class="form-label">TABLE NAME</label>
-      <select  type="tableName" class="form-select" id="tableName"></select>
+      <select type="tableName" class="form-select" id="tableName"></select>
+    </div>
+    <div class="m-3 col-5">
+      <label for="groupId" class="form-label">GROUP ID</label>
+      <input type="groupId" class="form-control" id="groupId"/>
     </div>
     <div class="m-3 col-5">
       <label for="destination" class="form-label">DESTINATION</label>
@@ -43,6 +47,7 @@
         schema: document.getElementById("dbSchema").value,
         tableName: document.getElementById("tableName").value,
         destination: document.getElementById("destination").value,
+        groupId: document.getElementById("groupId").value,
       };
 
       const init = {

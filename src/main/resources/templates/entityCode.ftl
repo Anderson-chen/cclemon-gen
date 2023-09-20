@@ -1,14 +1,11 @@
-package org.cclemon.entity;
+package ${groupId}.${entityClassName}.entity;
 
 import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicUpdate;
+import org.cclemon.entity.BaseEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Table
-@DynamicUpdate
-@JsonRootName(value = "result")
-@JsonIgnoreProperties(value = { "_links" }, allowGetters = true)
-public class ${entityClassName} extends BaseEntity {
+public class ${entityClassName}Entity extends BaseEntity {
     
     <#list metaDataDTOList as metaData>
 	/**

@@ -34,9 +34,10 @@ public class MetaDataService {
      * @param schema
      * @param tableName
      * @param destination
+     * @param string
      * @throws Exception
      */
-    public void codeGen(String schema, String tableName, String destination)
+    public void codeGen(String schema, String tableName, String destination, String groupId)
             throws Exception {
 
         // 取得metaData資訊
@@ -50,7 +51,7 @@ public class MetaDataService {
 
         // 根據types去產生所需程式碼
         for (String type : types) {
-            CodeGenerator.generateCode(tableName, metaDataDTOList, destination, type);
+            CodeGenerator.generateCode(tableName, metaDataDTOList, destination, type, groupId);
         }
 
     }
