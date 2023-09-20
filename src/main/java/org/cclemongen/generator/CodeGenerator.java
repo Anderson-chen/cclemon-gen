@@ -34,14 +34,25 @@ public class CodeGenerator {
 
         Template template = getTemplate(type + "Code.ftl");
 
-        String entityClassName = StringUtils.capitalize(tableName.toLowerCase());
+        String lowerCaseTableName = MetaDataDTO.getFieldName(tableName);
+        String entityClassName = StringUtils.capitalize(lowerCaseTableName);
 
         Map<String, Object> dataModel = new HashMap<>();
+        dataModel.put("lowerCaseTableName", lowerCaseTableName);
         dataModel.put("entityClassName", entityClassName);
         dataModel.put("groupId", groupId);
         dataModel.put("metaDataDTOList", metaDataDTOList);
+        dataModel.put("hasBigDecimal",
+                metaDataDTOList.stream().filter(data -> "DECIMAL".equals(data.getColumnType())).findAny().isPresent());
+        dataModel.put("hasTime",
+                metaDataDTOList.stream().filter(data -> "TIME".equals(data.getColumnType())).findAny().isPresent());
+        dataModel.put("hasTimestamp",
+                metaDataDTOList.stream().filter(data -> "TIMESTAMP".equals(data.getColumnType())).findAny()
+                        .isPresent());
+        dataModel.put("hasDate",
+                metaDataDTOList.stream().filter(data -> "DATE".equals(data.getColumnType())).findAny().isPresent());
 
-        File outputDirectory = new File(destination + "/" + entityClassName + "/" + type);
+        File outputDirectory = new File(destination + "/" + lowerCaseTableName + "/" + type);
 
         outputDirectory.mkdirs();
 
@@ -54,7 +65,8 @@ public class CodeGenerator {
         }
 
         System.out.println(
-                outputDirectory + "\\" + entityClassName + StringUtils.capitalize(type) + ".java" + " CREATE DONE");
+                outputDirectory + "\\" + entityClassName + StringUtils.capitalize(type) + ".java"
+                        + " CREATE DONE");
 
     }
 

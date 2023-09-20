@@ -14,12 +14,27 @@ public class MetaDataDTO {
     int columnSize;
     String remark;
     String isNullable;
+    Boolean isBaseField;
 
     public String getFieldName() {
 
         StringBuilder sb = new StringBuilder();
 
         String[] split = this.columnName.split("_");
+
+        for (String str : split) {
+
+            sb.append(StringUtils.capitalize(str.toLowerCase()));
+        }
+
+        return decapitalize(sb.toString());
+    }
+
+    public static String getFieldName(String input) {
+
+        StringBuilder sb = new StringBuilder();
+
+        String[] split = input.split("_");
 
         for (String str : split) {
 

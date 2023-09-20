@@ -1,6 +1,17 @@
-package ${groupId}.${entityClassName}.entity;
+package ${groupId}.${lowerCaseTableName}.entity;
 
+<#if hasBigDecimal >	
 import java.math.BigDecimal;
+</#if>
+<#if hasDate >	
+import java.sql.Date;
+</#if>
+<#if hasTime>	
+import java.sql.Time;
+</#if>
+<#if hasTimestamp>	
+import java.sql.Timestamp;
+</#if>
 import javax.persistence.Entity;
 import javax.persistence.Table;
 

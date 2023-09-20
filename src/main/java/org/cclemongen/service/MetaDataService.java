@@ -16,12 +16,19 @@ import org.springframework.stereotype.Service;
 public class MetaDataService {
 
     private static final List<String> excludeScema = new ArrayList<>();
-
+    private final static List<String> baseField = new ArrayList<>();
     static {
         excludeScema.add("information_schema");
         excludeScema.add("mysql");
         excludeScema.add("performance_schema");
         excludeScema.add("sys");
+        baseField.add("id");
+        baseField.add("last_modified_user_id");
+        baseField.add("last_modified_time");
+        baseField.add("deleted");
+        baseField.add("create_user_id");
+        baseField.add("create_time");
+        baseField.add("version");
     }
 
     @Autowired
@@ -77,6 +84,10 @@ public class MetaDataService {
 
         // 遍歷指定table的欄位資訊
         while (columns.next()) {
+
+            if (baseField.contains(columns.getString("COLUMN_NAME").toLowerCase())) {
+                continue;
+            }
 
             MetaDataDTO metaDataDTO = new MetaDataDTO();
 
