@@ -1,43 +1,33 @@
-package ${groupId}.${lowerCaseTableName}.entity;
+package ${groupId}.${lowerCaseTableName}.service;
 
-<#if hasBigDecimal >	
-import java.math.BigDecimal;
-</#if>
-<#if hasDate >	
-import java.sql.Date;
-</#if>
-<#if hasTime>	
-import java.sql.Time;
-</#if>
-<#if hasTimestamp>	
-import java.sql.Timestamp;
-</#if>
-<#if hasLocalDateTime>	
-import java.time.LocalDateTime;
-</#if>
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.List;
 
-import org.cclemon.entity.BaseEntity;
+import  ${groupId}.${lowerCaseTableName}.dto.${entityClassName}DTO;
+import  ${groupId}.${lowerCaseTableName}.entity.${entityClassName}Entity;
+import  ${groupId}.${lowerCaseTableName}.repository.${entityClassName}Repository;
+import  ${groupId}.${lowerCaseTableName}.specification.${entityClassName}Specification;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+@Service
+@AllArgsConstructor
+public class ${entityClassName}Service {
 
-@Entity
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Table(name="${tableName}")
-public class ${entityClassName}Entity extends BaseEntity {
-    
-    <#list metaDataDTOList as metaData>
-	    <#if !metaData.isBaseField>
-	/**
-	 * Desc:${metaData.remark}
-	 * Column Name:${metaData.columnName}, Column Type:${metaData.columnType}, Nullable:${metaData.getIsNullableStr()}
-	 */
-    private ${metaData.sqlToJavaType()} ${metaData.getFieldName()} ;
-        </#if>
-    </#list>
+    private final ${entityClassName}Repository ${lowerCaseTableName}Repository;
+
+    public List<${entityClassName}Entity> query(BodyDTO dto) {
+
+        ${entityClassName}Entity entity = new ${entityClassName}Entity();
+
+        BeanUtils.copyProperties(dto, entity);
+
+        Specification<${entityClassName}Entity> spec = ${entityClassName}Specification.create(entity);
+
+        return ${lowerCaseTableName}Repository.findAll(spec);
+
+    }
 
 }
