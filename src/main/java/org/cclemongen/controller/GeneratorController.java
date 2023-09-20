@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.cclemongen.dto.FreeMakerGenDTO;
 import org.cclemongen.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,11 @@ public class GeneratorController {
 
       log.info("req : {} ", req);
 
-      metaDataService.codeGen(req.getSchema(), req.getTableName(), req.getDestination(), req.getGroupId());
+      FreeMakerGenDTO freeMakerGenDTO = FreeMakerGenDTO.builder().schema(req.getSchema()).tableName(req.getTableName())
+            .destination(req.getDestination())
+            .groupId(req.getGroupId()).build();
+
+      metaDataService.codeGen(freeMakerGenDTO);
 
       return Response.builder().result(req).code(200).msg("產檔成功!").build();
 
@@ -78,10 +83,10 @@ public class GeneratorController {
 
 @Data
 class Request {
-   String schema;
-   String tableName;
-   String destination;
-   String groupId;
+   private String schema;
+   private String tableName;
+   private String destination;
+   private String groupId;
 }
 
 @Data

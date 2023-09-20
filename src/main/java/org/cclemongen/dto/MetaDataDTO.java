@@ -59,6 +59,7 @@ public class MetaDataDTO {
 
     public String sqlToJavaType() {
         switch (this.columnType) {
+            case "INT":
             case "INTEGER":
                 return "Integer";
             case "BIGINT":
@@ -76,6 +77,7 @@ public class MetaDataDTO {
             case "DECIMAL":
                 return "BigDecimal";
             case "BOOLEAN":
+            case "BIT":
                 return "Boolean";
             case "CHAR":
             case "VARCHAR":
@@ -87,6 +89,8 @@ public class MetaDataDTO {
                 return "Time";
             case "TIMESTAMP":
                 return "Timestamp";
+            case "DATETIME":
+                return "LocalDateTime";
             default:
                 return "String"; // 預設為字串型態
         }
