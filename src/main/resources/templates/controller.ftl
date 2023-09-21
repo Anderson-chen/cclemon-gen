@@ -1,43 +1,29 @@
-package ${groupId}.${lowerCaseTableName}.entity;
+package ${groupId}.${lowerCaseTableName}.controller;
 
-<#if hasBigDecimal >	
-import java.math.BigDecimal;
-</#if>
-<#if hasDate >	
-import java.sql.Date;
-</#if>
-<#if hasTime>	
-import java.sql.Time;
-</#if>
-<#if hasTimestamp>	
-import java.sql.Timestamp;
-</#if>
-<#if hasLocalDateTime>	
-import java.time.LocalDateTime;
-</#if>
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.List;
 
-import org.cclemon.entity.BaseEntity;
+import ${groupId}.${lowerCaseTableName}.dto.${entityClassName}DTO;
+import ${groupId}.${lowerCaseTableName}.entity.${entityClassName}Entity;
+import ${groupId}.${lowerCaseTableName}.service.${entityClassName}Service;
+import ${groupId}.${lowerCaseTableName}.dto.CclemonResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RestController;
 
+import lombok.AllArgsConstructor;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+@RestController
+@AllArgsConstructor
+public class ${entityClassName}Controller {
 
-@Entity
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Table(name="${tableName}")
-public class ${entityClassName}Entity extends BaseEntity {
-    
-    <#list metaDataDTOList as metaData>
-	    <#if !metaData.isBaseField>
-	/**
-	 * Desc:${metaData.remark}
-	 * Column Name:${metaData.columnName}, Column Type:${metaData.columnType}, Nullable:${metaData.getIsNullableStr()}
-	 */
-    private ${metaData.sqlToJavaType()} ${metaData.getFieldName()} ;
-        </#if>
-    </#list>
+    private final ${entityClassName}Service ${lowerCaseTableName}Service;
+
+    @GetMapping("/${lowerCaseTableName}")
+    public CclemonResult<List<BodyEntity>> query(@ModelAttribute ${entityClassName}DTO ${lowerCaseTableName}DTO) {
+
+        List<${entityClassName}Entity> qRes = ${lowerCaseTableName}Service.query(${lowerCaseTableName}DTO);
+
+        return CclemonResult.<List<${entityClassName}Entity>>builder().result(qRes).code(CclemonResult.SUCCESS_CODE).build();
+    }
 
 }
