@@ -5,7 +5,7 @@ import java.util.List;
 import ${groupId}.${lowerCaseTableName}.dto.${entityClassName}DTO;
 import ${groupId}.${lowerCaseTableName}.entity.${entityClassName}Entity;
 import ${groupId}.${lowerCaseTableName}.service.${entityClassName}Service;
-import ${groupId}.${lowerCaseTableName}.dto.CclemonResult;
+import ${groupId}.dto.CclemonResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;

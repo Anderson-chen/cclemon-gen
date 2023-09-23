@@ -2,10 +2,10 @@ package ${groupId}.${lowerCaseTableName}.service;
 
 import java.util.List;
 
-import  ${groupId}.${lowerCaseTableName}.dto.${entityClassName}DTO;
-import  ${groupId}.${lowerCaseTableName}.entity.${entityClassName}Entity;
-import  ${groupId}.${lowerCaseTableName}.repository.${entityClassName}Repository;
-import  ${groupId}.${lowerCaseTableName}.specification.${entityClassName}Specification;
+import ${groupId}.${lowerCaseTableName}.dto.${entityClassName}DTO;
+import ${groupId}.${lowerCaseTableName}.entity.${entityClassName}Entity;
+import ${groupId}.${lowerCaseTableName}.repository.${entityClassName}Repository;
+import ${groupId}.${lowerCaseTableName}.specification.${entityClassName}Specification;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.cclemongen.dto.FreeMakerGenDTO;
 import org.cclemongen.service.MetaDataService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,16 +16,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
+@AllArgsConstructor
 public class GeneratorController {
 
-   @Autowired
-   MetaDataService metaDataService;
+   private final  MetaDataService metaDataService;
 
    @GetMapping(value = "/home")
    public String home(HttpServletResponse res) {

@@ -14,6 +14,7 @@ import org.cclemongen.dto.FreeMakerGenDTO;
 import org.cclemongen.dto.MetaDataDTO;
 import org.cclemongen.generator.CodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -49,6 +50,9 @@ public class MetaDataService {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Value("${codegen.types}")
+    private String[] types;
+
     /**
      * codeGen主流程
      * 
@@ -68,8 +72,6 @@ public class MetaDataService {
         if (freeMakerGenDTO.getMetaDataDTOList().size() == 0) {
             throw new Exception("DB資訊錯誤");
         }
-
-        String[] types = { "entity", "repository", "specification" };
 
         // 根據types去產生所需程式碼
         for (String type : types) {
