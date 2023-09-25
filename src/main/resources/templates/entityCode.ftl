@@ -23,11 +23,17 @@ import org.cclemon.entity.BaseEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Table(name="${tableName}")
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ${entityClassName}Entity extends BaseEntity {
     
     <#list metaDataDTOList as metaData>
