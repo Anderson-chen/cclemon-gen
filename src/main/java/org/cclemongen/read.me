@@ -1,0 +1,34 @@
+    public static String getContent(Node node) {
+        
+        StringBuilder contentText = new StringBuilder();
+
+        if (node instanceof Element) {
+            Element element = (Element) node;
+            contentText.append("<").append(element.tagName());
+
+            // 获取标签的属性信息
+            for (Attribute attribute : element.attributes()) {
+                contentText.append(" ").append(attribute.getKey()).append("='").append(attribute.getValue()).append("'");
+            }
+
+            contentText.append(">");
+        } else if (node instanceof Comment) {
+            Comment comment = (Comment) node;
+            contentText.append("<!-- ").append(comment.getData()).append(" -->\n");
+        } else if (node instanceof TextNode) {
+            TextNode textNode = (TextNode) node;
+            contentText.append(textNode.getWholeText());
+        }
+
+        for (Node child : node.childNodes()) {
+            contentText.append(getContent(child));
+        }
+
+        if (node instanceof Element) {
+            Element element = (Element) node;
+            contentText.append("</").append(element.tagName()).append(">");
+        }
+
+        return contentText.toString();
+    }
+}
