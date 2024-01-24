@@ -1,50 +1,43 @@
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+package org.example;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class JavaParserExample {
+public class PermutationExample {
     public static void main(String[] args) {
-        File javaFile = new File("YourJavaFile.java");
-        String targetVariableName = "yourVariableName"; // Specify the variable name you want to find
+        List<String> c = Arrays.asList("AJ", "AK", "AL", "AT", "AU");
+        int k = 4;
 
-        try {
-            CompilationUnit cu = StaticJavaParser.parse(javaFile);
+        List<List<String>> permutations = generatePermutations(c, k);
+        System.out.println("Permutation size:  " + permutations.size());
+        for (List<String> permutation : permutations) {
 
-            // Create a custom visitor to find the variable declaration
-            VariableDeclarationVisitor declarationVisitor = new VariableDeclarationVisitor(targetVariableName);
-            declarationVisitor.visit(cu, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Permutation: " + permutation);
+            
         }
+
     }
 
-    // Custom visitor to find a specific variable declaration by name
-    private static class VariableDeclarationVisitor extends VoidVisitorAdapter<Void> {
-        private String targetVariableName;
 
-        public VariableDeclarationVisitor(String targetVariableName) {
-            this.targetVariableName = targetVariableName;
+    private static List<List<String>> generatePermutations(List<String> c, int k) {
+        List<List<String>> result = new ArrayList<>();
+        generatePermutationsHelper(c, k, new ArrayList<>(), result);
+        return result;
+    }
+
+    private static void generatePermutationsHelper(List<String> c, int k, List<String> current,
+                                                   List<List<String>> result) {
+        if (k == 0) {
+            result.add(new ArrayList<>(current));
+            return;
         }
 
-        @Override
-        public void visit(VariableDeclarator declarator, Void arg) {
-            super.visit(declarator, arg);
-
-            // Check if the variable name matches the target variable
-            if (declarator.getNameAsString().equals(targetVariableName)) {
-                // Get the variable type
-                Type variableType = declarator.getType();
-
-                // You can also get the initialization expression if present
-                // Expression initialization = declarator.getInitializer().orElse(null);
-
-                System.out.println("Variable Name: " + targetVariableName);
-                System.out.println("Variable Type: " + variableType);
+        for (int i = 0; i < c.size(); i++) {
+            if (!current.contains(c.get(i))) {
+                current.add(c.get(i));
+                generatePermutationsHelper(c, k - 1, current, result);
+                current.remove(current.size() - 1);
             }
         }
     }
