@@ -1,4 +1,4 @@
-package org.cclemongen.cclemongen;
+package org.cclemongen;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

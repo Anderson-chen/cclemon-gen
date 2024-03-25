@@ -4,11 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 import org.cclemongen.dto.FreeMakerGenDTO;
 import org.cclemongen.dto.MetaDataDTO;
@@ -25,6 +27,7 @@ public class MetaDataService {
     private static final List<String> excludeScemaList = new ArrayList<>();
     private static final List<String> baseFieldList = new ArrayList<>();
     private static final Map<String, String> needImportMap = new HashMap<>();
+
     static {
 
         excludeScemaList.add("information_schema");
@@ -55,8 +58,7 @@ public class MetaDataService {
 
     /**
      * codeGen主流程
-     * 
-     * 
+     *
      * @param schema
      * @param tableName
      * @param destination
@@ -69,7 +71,7 @@ public class MetaDataService {
         // 取得metaData資訊
         getMetadata(freeMakerGenDTO);
 
-        if (freeMakerGenDTO.getMetaDataDTOList().size() == 0) {
+        if (freeMakerGenDTO.getMetaDataDTOList().isEmpty()) {
             throw new Exception("DB資訊錯誤");
         }
 
@@ -82,7 +84,7 @@ public class MetaDataService {
 
     /**
      * 指定schema 和 table 取得欄位資訊
-     * 
+     *
      * @param schemaPattern
      * @param tableNamePattern
      * @return
@@ -136,7 +138,7 @@ public class MetaDataService {
 
     /**
      * 指定schema 取得所有table名稱
-     * 
+     *
      * @param schemaPattern
      * @return
      * @throws SQLException
@@ -149,7 +151,7 @@ public class MetaDataService {
         DatabaseMetaData metaData = jdbcTemplate.getDataSource().getConnection().getMetaData();
 
         // 指定table的欄位資訊
-        ResultSet tablesResultSet = metaData.getTables(pattern, pattern, null, new String[] { "TABLE" });
+        ResultSet tablesResultSet = metaData.getTables(pattern, pattern, null, new String[]{"TABLE"});
 
         while (tablesResultSet.next()) {
             String tableName = tablesResultSet.getString("TABLE_NAME");

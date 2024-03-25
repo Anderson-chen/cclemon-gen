@@ -46,4 +46,13 @@ public class ${entityClassName}Entity extends BaseEntity {
         </#if>
     </#list>
 
+    public static ${entityClassName}Entity get${entityClassName}() {
+        ${entityClassName}Entity entity = new ${entityClassName}Entity();
+        <#list metaDataDTOList as metaData>
+            <#if !metaData.isBaseField>
+        entity.set${metaData.getFieldName()?cap_first}();
+            </#if>
+        </#list>
+        return entity;
+    }
 }
