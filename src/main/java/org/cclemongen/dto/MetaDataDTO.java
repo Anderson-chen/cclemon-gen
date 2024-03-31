@@ -1,9 +1,8 @@
 package org.cclemongen.dto;
 
-import org.springframework.util.StringUtils;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 @Getter
 @Setter
@@ -15,20 +14,6 @@ public class MetaDataDTO {
     String remark;
     String isNullable;
     Boolean isBaseField;
-
-    public String getFieldName() {
-
-        StringBuilder sb = new StringBuilder();
-
-        String[] split = this.columnName.split("_");
-
-        for (String str : split) {
-
-            sb.append(StringUtils.capitalize(str.toLowerCase()));
-        }
-
-        return decapitalize(sb.toString());
-    }
 
     public static String getFieldName(String input) {
 
@@ -44,10 +29,6 @@ public class MetaDataDTO {
         return decapitalize(sb.toString());
     }
 
-    public String getIsNullableStr() {
-        return "Yes".equals(this.isNullable) ? "Y" : "N";
-    }
-
     public static String decapitalize(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -57,43 +38,40 @@ public class MetaDataDTO {
         return new String(chars);
     }
 
-    public String sqlToJavaType() {
-        switch (this.columnType) {
-            case "INT":
-            case "INTEGER":
-                return "Integer";
-            case "BIGINT":
-                return "Long";
-            case "SMALLINT":
-                return "Short";
-            case "TINYINT":
-                return "Byte";
-            case "FLOAT":
-            case "REAL":
-                return "Float";
-            case "DOUBLE":
-                return "Double";
-            case "NUMERIC":
-            case "DECIMAL":
-                return "BigDecimal";
-            case "BOOLEAN":
-            case "BIT":
-                return "Boolean";
-            case "CHAR":
-            case "VARCHAR":
-            case "LONGVARCHAR":
-                return "String";
-            case "DATE":
-                return "Date";
-            case "TIME":
-                return "Time";
-            case "TIMESTAMP":
-                return "Timestamp";
-            case "DATETIME":
-                return "LocalDateTime";
-            default:
-                return "String"; // 預設為字串型態
+    public String getFieldName() {
+
+        StringBuilder sb = new StringBuilder();
+
+        String[] split = this.columnName.split("_");
+
+        for (String str : split) {
+
+            sb.append(StringUtils.capitalize(str.toLowerCase()));
         }
+
+        return decapitalize(sb.toString());
     }
 
+    public String getIsNullableStr() {
+        return "Yes".equals(this.isNullable) ? "Y" : "N";
+    }
+
+    public String sqlToJavaType() {
+        return switch (this.columnType) {
+            case "INT", "INTEGER", "BIGINT", "SMALLINT", "TINYINT", "FLOAT", "REAL", "DOUBLE", "NUMERIC", "DECIMAL" ->
+                    "BigDecimal";
+            case "BOOLEAN", "BIT" -> "Boolean";
+            case "CHAR", "VARCHAR", "LONGVARCHAR", "DATE", "TIME", "TIMESTAMP", "DATETIME" -> "String";
+            default -> "String"; // 預設為字串型態
+        };
+    }
+
+    public String getDefaultValue() {
+        return switch (this.columnType) {
+            case "INT", "INTEGER", "BIGINT", "SMALLINT", "TINYINT", "FLOAT", "REAL", "DOUBLE", "NUMERIC", "DECIMAL", "BOOLEAN", "BIT" ->
+                    "new BigDecimal(0)";
+            case "CHAR", "VARCHAR", "LONGVARCHAR", "DATE", "TIME", "TIMESTAMP", "DATETIME" -> "\"\"";
+            default -> "\"\""; // 預設為字串型態
+        };
+    }
 }

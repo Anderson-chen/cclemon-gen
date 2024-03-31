@@ -50,7 +50,7 @@ public class ${entityClassName}Entity extends BaseEntity {
         ${entityClassName}Entity entity = new ${entityClassName}Entity();
         <#list metaDataDTOList as metaData>
             <#if !metaData.isBaseField>
-        entity.set${metaData.getFieldName()?cap_first}();
+        entity.set${metaData.getFieldName()?cap_first}(${metaData.getDefaultValue()});
             </#if>
         </#list>
         return entity;
