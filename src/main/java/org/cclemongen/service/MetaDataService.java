@@ -1,17 +1,5 @@
 package org.cclemongen.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 import org.cclemongen.dto.FreeMakerGenDTO;
 import org.cclemongen.dto.MetaDataDTO;
 import org.cclemongen.generator.CodeGenerator;
@@ -20,6 +8,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MetaDataService {
@@ -56,6 +54,27 @@ public class MetaDataService {
     @Value("${codegen.types}")
     private String[] types;
 
+    private static MetaDataDTO getMetaDataDTO(FreeMakerGenDTO freeMakerGenDTO, ResultSet columns) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        boolean isBaseField = baseFieldList.contains(columns.getString("COLUMN_NAME").toLowerCase());
+        MetaDataDTO metaDataDTO = new MetaDataDTO();
+        metaDataDTO.setIsBaseField(isBaseField);// 是否為baseEntity的屬性
+        metaDataDTO.setColumnName(columns.getString("COLUMN_NAME"));// 欄位名稱
+        metaDataDTO.setColumnType(columns.getString("TYPE_NAME"));// 欄位類型
+        metaDataDTO.setColumnSize(columns.getInt("COLUMN_SIZE"));// 欄位大小
+        metaDataDTO.setRemark(columns.getString("REMARKS"));// 欄位說明
+        metaDataDTO.setIsNullable(columns.getString("IS_NULLABLE"));// nullable
+
+        if (!isBaseField) { // baseEntity屬性以外的需要注意是否需要import敘述
+            String setMethodName = needImportMap.get(columns.getString("TYPE_NAME"));
+            if (StringUtils.hasText(setMethodName)) {// 若是需要import的類別會找到對應的setter方法
+                Method method = freeMakerGenDTO.getClass().getDeclaredMethod(setMethodName,
+                        Boolean.class);
+                method.invoke(freeMakerGenDTO, true);
+            }
+        }
+        return metaDataDTO;
+    }
+
     /**
      * codeGen主流程
      *
@@ -80,6 +99,9 @@ public class MetaDataService {
             CodeGenerator.generateCode(freeMakerGenDTO, type);
         }
 
+        //資料庫ddl檔案
+        CodeGenerator.createDdl(freeMakerGenDTO);
+
     }
 
     /**
@@ -102,38 +124,27 @@ public class MetaDataService {
         // 透過jdbcTemplate取得metaData
         DatabaseMetaData metaData = jdbcTemplate.getDataSource().getConnection().getMetaData();
 
+        //取得ddl資訊
+        getDdl(freeMakerGenDTO);
+
         // 指定table的欄位資訊
         ResultSet columns = metaData.getColumns(null, freeMakerGenDTO.getSchema(), freeMakerGenDTO.getTableName(),
                 null);
 
         // 宣告儲存metaData資訊的DTO
         List<MetaDataDTO> metaDataDTOList = new ArrayList<>();
+        freeMakerGenDTO.setMetaDataDTOList(metaDataDTOList);
 
         // 遍歷指定table的欄位資訊
         while (columns.next()) {
-            boolean isBaseField = baseFieldList.contains(columns.getString("COLUMN_NAME").toLowerCase());
-            MetaDataDTO metaDataDTO = new MetaDataDTO();
-            metaDataDTO.setIsBaseField(isBaseField);// 是否為baseEntity的屬性
-            metaDataDTO.setColumnName(columns.getString("COLUMN_NAME"));// 欄位名稱
-            metaDataDTO.setColumnType(columns.getString("TYPE_NAME"));// 欄位類型
-            metaDataDTO.setColumnSize(columns.getInt("COLUMN_SIZE"));// 欄位大小
-            metaDataDTO.setRemark(columns.getString("REMARKS"));// 欄位說明
-            metaDataDTO.setIsNullable(columns.getString("IS_NULLABLE"));// nullable
-
-            if (!isBaseField) { // baseEntity屬性以外的需要注意是否需要import敘述
-                String setMethodName = needImportMap.get(columns.getString("TYPE_NAME"));
-                if (StringUtils.hasText(setMethodName)) {// 若是需要import的類別會找到對應的setter方法
-                    Method method = freeMakerGenDTO.getClass().getDeclaredMethod(setMethodName,
-                            Boolean.class);
-                    method.invoke(freeMakerGenDTO, true);
-                }
-            }
-
-            metaDataDTOList.add(metaDataDTO);
+            metaDataDTOList.add(getMetaDataDTO(freeMakerGenDTO, columns));
         }
+    }
 
-        freeMakerGenDTO.setMetaDataDTOList(metaDataDTOList);
-
+    private void getDdl(FreeMakerGenDTO freeMakerGenDTO) {
+        String query = "SHOW CREATE TABLE " + "`" + freeMakerGenDTO.getSchema() + "`." + freeMakerGenDTO.getTableName();
+        var ddl = jdbcTemplate.queryForObject(query, (rs, rowNum) -> rs.getString(2));
+        freeMakerGenDTO.setDdl(ddl);
     }
 
     /**

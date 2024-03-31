@@ -13,6 +13,7 @@ public class FreeMakerGenDTO {
     private String tableName;
     private String destination;
     private String groupId;
+    private String ddl;
     private List<MetaDataDTO> MetaDataDTOList;
     @Builder.Default
     private Boolean hasTime = false;
