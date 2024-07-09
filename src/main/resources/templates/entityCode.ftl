@@ -15,8 +15,8 @@ import java.sql.Timestamp;
 <#if hasLocalDateTime>	
 import java.time.LocalDateTime;
 </#if>
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
@@ -73,7 +73,7 @@ public class ${entityClassName}Entity extends BaseEntity {
                  :${metaData.getFieldName()}<#if metaData_has_next>, </#if>
            </#list>
               )
-        """
+        """;
 
         public void insert(NamedParameterJdbcTemplate template) {
             template.update(insertSQL,new BeanPropertySqlParameterSource(this));
