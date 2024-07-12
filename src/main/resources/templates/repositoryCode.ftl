@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ${groupId}.${lowerCaseTableName}.entity.${entityClassName}Entity;
 
 @Repository
-public interface ${entityClassName}Repository extends JpaRepository<${entityClassName}Entity, Long>,JpaSpecificationExecutor<${entityClassName}Entity> {
+public interface ${entityClassName}Repository extends JpaRepository<${entityClassName}Entity, String>,JpaSpecificationExecutor<${entityClassName}Entity> {
 
 }

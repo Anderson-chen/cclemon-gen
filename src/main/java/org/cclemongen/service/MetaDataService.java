@@ -22,16 +22,16 @@ import java.util.Map;
 @Service
 public class MetaDataService {
 
-    private static final List<String> excludeScemaList = new ArrayList<>();
+    private static final List<String> excludeSchemaList = new ArrayList<>();
     private static final List<String> baseFieldList = new ArrayList<>();
     private static final Map<String, String> needImportMap = new HashMap<>();
 
     static {
 
-        excludeScemaList.add("information_schema");
-        excludeScemaList.add("mysql");
-        excludeScemaList.add("performance_schema");
-        excludeScemaList.add("sys");
+        excludeSchemaList.add("information_schema");
+        excludeSchemaList.add("mysql");
+        excludeSchemaList.add("performance_schema");
+        excludeSchemaList.add("sys");
 
         baseFieldList.add("id");
         baseFieldList.add("last_modified_user_id");
@@ -42,6 +42,7 @@ public class MetaDataService {
         baseFieldList.add("version");
 
         needImportMap.put("DECIMAL", "setHasBigDecimal");
+        needImportMap.put("BIGINT", "setHasBigDecimal");
         needImportMap.put("DATETIME", "setHasLocalDateTime");
         needImportMap.put("TIMESTAMP", "setHasTimestamp");
         needImportMap.put("TIME", "setHasTime");
@@ -186,7 +187,7 @@ public class MetaDataService {
 
             System.out.println("schema:" + schema);
 
-            if (!excludeScemaList.contains(schema)) {
+            if (!excludeSchemaList.contains(schema)) {
                 schemas.add(schema);
             }
         }
